@@ -151,14 +151,14 @@ def diff_many(models1, models2, migrator=None, reverse=False):
 
     changes = []
 
+    # Add models
+    for name in [m for m in models1 if m not in models2]:
+        changes.append(create_model(models1[name], migrator=migrator))
+
     for name, model1 in models1.items():
         if name not in models2:
             continue
         changes += diff_one(model1, models2[name], migrator=migrator)
-
-    # Add models
-    for name in [m for m in models1 if m not in models2]:
-        changes.append(create_model(models1[name], migrator=migrator))
 
     # Remove models
     for name in [m for m in models2 if m not in models1]:
